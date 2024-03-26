@@ -4,13 +4,13 @@
      let todoItem = '';
      let storedList;
      //let urgent, someday
-     let urgent, someday;
-     let todoList = wrtiable([]);
+     //let urgent, someday;
+     let todoList = writable([]);
 
 
      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
           storedList = localStorage.getItem('storedList');
-          if(stored) {
+          if(storedList) {
                $todoList = (JSON.parse(storedList));
           }
      }
@@ -18,31 +18,37 @@
 
 
 
-
+     function updateList() {
+          return storedList = localStorage.setItem('storedList', JSON.stringify($todoList));
+     }
 
 
      
-     $: isDone = todoList.filter(item => item.done);
+     $: isDone = $todoList.filter(item => item.done);
      // $: somedayList = todoList.filter(item => item.someday)
      function addToArray() {
           if (todoItem == '') {
                return;
           }
-          todoList = [...todoList, {
+          $todoList = [...$todoList, {
                text: todoItem,
-               done: false,
-               urgent: urgent,
-               someday: someday
+               done: false
+              // urgent: urgent,
+              // someday: someday
           }];
-          console.log(todoList);
+          //console.log($todoList);
+          updateList();
           todoItem = '';
      }
      function removeThis(index) {
-          todoList.splice(index, 1);
-          todoList = todoList;
+          $todoList.splice(index, 1);
+          $todoList = $todoList;
+          updateList();
+
      }
      function clearDone() {
-          todoList = todoList.filter(item => !item.done)
+          $todoList = $todoList.filter(item => !item.done)
+          updateList();
      }
 </script>
 
@@ -61,7 +67,7 @@
 </form>
 
 <ul>
-     {#each todoList as item, index}
+     {#each $todoList as item, index}
           <li>
                <input type="checkbox" bind:checked={item.done}>
 
@@ -70,14 +76,16 @@
           </li>
      {/each}
 </ul>
-{#if somedayList.length > 0}
+<!-- {#if somedayList.length > 0}
      <h2>Someday</h2>
      <ul>
           {#each somedayList as item, index}
                <li>{item.text}</li>
           {/each}
      </ul>
-{/if}
+{/if} 
+-->
+
 {#if isDone.length > 0}
 <button on:click={clearDone}>Remove Done</button>
 {/if}
