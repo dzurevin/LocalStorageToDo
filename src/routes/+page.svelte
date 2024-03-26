@@ -1,10 +1,29 @@
 <script>
      import '../style.css';
+     import { writable } from 'svelte/store';
      let todoItem = '';
+     let storedList;
+     //let urgent, someday
      let urgent, someday;
-     let todoList = [];
+     let todoList = wrtiable([]);
+
+
+     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+          storedList = localStorage.getItem('storedList');
+          if(stored) {
+               $todoList = (JSON.parse(storedList));
+          }
+     }
+
+
+
+
+
+
+
+     
      $: isDone = todoList.filter(item => item.done);
-     $: somedayList = todoList.filter(item => item.someday)
+     // $: somedayList = todoList.filter(item => item.someday)
      function addToArray() {
           if (todoItem == '') {
                return;
