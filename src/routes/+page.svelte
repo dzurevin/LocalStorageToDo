@@ -69,7 +69,7 @@
 <ul>
      {#each $todoList as item, index}
           <li>
-               <input type="checkbox" bind:checked={item.done}>
+               <input type="checkbox" bind:checked={item.done} on:change={updateList}>
 
                <span class:done={item.done} >{item.text}</span>
                <span on:click={() => removeThis(index)} class="remove" role="button" tabindex="0">&times;</span>
